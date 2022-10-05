@@ -146,6 +146,7 @@ class CreateCinemaSchema extends Migration
             $table->foreign('movie_show_id')->references('id')->on('movie_show');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->string('status');
 
 
             $table->timestamps();
