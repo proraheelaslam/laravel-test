@@ -36,6 +36,122 @@ class CreateCinemaSchema extends Migration
      */
     public function up()
     {
+
+         Schema::create('cinema', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+         });
+
+        // movie 
+        Schema::create('movies', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->integer('rating');
+            $table->binary('image');
+            $table->string('tags');
+            $table->time('watch_time');
+            $table->time('duration');
+            $table->timestamps();
+         });
+ 
+        // booking
+
+        Schema::create('bookings', function (Blueprint $table) {
+
+            $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('movie_id');
+            $table->foreign('movie_id')->references('id')->on('movies');
+
+            $table->unsignedBigInteger('cinema_id');
+            $table->foreign('cinema_id')->references('id')->on('cinema');
+
+            $table->string('booking_seat_type');
+            $table->datetime('start_time');
+            $table->timestamps();
+
+         });
+
+        // cinema_owners
+
+         Schema::create('cinema_owners', function (Blueprint $table) {
+
+            $table->id();
+            $table->string('name');
+            $table->string('email');
+            $table->string('address');
+            $table->timestamps();
+
+         });
+
+         // movie_show
+
+        Schema::create('movie_show', function (Blueprint $table) {
+
+            $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('movie_id');
+            $table->foreign('movie_id')->references('id')->on('movies');
+
+            $table->string('movie_language');
+            $table->string('movie_type');
+
+            $table->timestamps();
+
+         });
+
+         // show_rooms
+
+        Schema::create('show_rooms', function (Blueprint $table) {
+
+            $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('cinema_owner_id');
+            $table->foreign('cinema_owner_id')->references('id')->on('cinema_owners');
+
+            $table->unsignedBigInteger('movie_id');
+            $table->foreign('movie_id')->references('id')->on('movies');
+        
+            $table->timestamps();
+
+         });
+
+        // tickets
+
+        Schema::create('tickets', function (Blueprint $table) {
+
+            $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('booking_id');
+            $table->foreign('booking_id')->references('id')->on('bookings');
+
+            $table->string('ticket_number');
+            $table->string('seat');
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+        
+            $table->timestamps();
+
+         });
+
+        // payment
+
+        Schema::create('payment', function (Blueprint $table) {
+
+            $table->id();
+            $table->string('amount');
+            $table->unsignedBigInteger('movie_show_id');
+            $table->foreign('movie_show_id')->references('id')->on('movie_show');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
+
+            $table->timestamps();
+
+         });
+
         throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
     }
 
